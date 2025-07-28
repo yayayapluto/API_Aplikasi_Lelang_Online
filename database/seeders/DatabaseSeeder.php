@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Category;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\JobType;
@@ -25,5 +26,6 @@ class DatabaseSeeder extends Seeder
         Subdistrict::factory(50)->create();
         Village::factory(50)->create();
         JobType::factory(50)->create();
+        Category::factory(50)->create();
     }
 }

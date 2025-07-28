@@ -9,8 +9,9 @@ Route::post("countries/uploadBatchData", [\App\Http\Controllers\CountryControlle
 Route::apiResource("provinces", \App\Http\Controllers\ProvinceController::class);
 Route::post("provinces/uploadBatchData", [\App\Http\Controllers\ProvinceController::class, "uploadBatchData"]);
 
-
 Route::apiResource("cities", \App\Http\Controllers\CityController::class);
+Route::post("cities/uploadBatchData", [\App\Http\Controllers\CityController::class, "uploadBatchData"]);
+
 Route::apiResource("subdistricts", \App\Http\Controllers\SubdistrictController::class);
 Route::apiResource("villages", \App\Http\Controllers\VillageController::class);
 

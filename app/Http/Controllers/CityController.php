@@ -75,4 +75,68 @@ class CityController extends Controller
         $city->delete();
         return Formatter::ApiResponse(200, "City removed");
     }
+
+    public function uploadBatchData(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|file|mimes:json,csv|max:10240',
+        ]);
+
+        if ($validator->fails()) {
+            return Formatter::ApiResponse(422, 'Validation failed', null, $validator->errors()->all());
+        }
+
+        $file = $request->file('file');
+        $data = [];
+
+        try {
+            if ($file->getClientOriginalExtension() === 'json') {
+                $json = json_decode(file_get_contents($file), true);
+                if (json_last_error() !== JSON_ERROR_NONE) return Formatter::ApiResponse(422, 'Invalid JSON');
+                $data = $json;
+            } elseif ($file->getClientOriginalExtension() === 'csv') {
+                $csv = array_map('str_getcsv', file($file->getPathname()));
+                $header = array_shift($csv);
+                foreach ($csv as $row) {
+                    if (count($row) === count($header)) {
+                        $data[] = array_combine($header, $row);
+                    }
+                }
+            }
+
+            $inserted = [];
+            $failed = [];
+
+            foreach ($data as $index => $row) {
+                $v = Validator::make($row, [
+                    'nama' => 'required|string|max:255',
+                    'province_id' => 'required|exists:provinces,id',
+                ]);
+                if ($v->fails()) {
+                    $failed[] = "Row " . ($index + 1) . ": " . implode(', ', $v->errors()->all());
+                    continue;
+                }
+
+                $validated = $v->validated();
+                if (City::where('nama', $validated['nama'])->where('province_id', $validated['province_id'])->exists()) {
+                    $failed[] = "Row " . ($index + 1) . ": City already exists in this province";
+                    continue;
+                }
+
+                try {
+                    \DB::beginTransaction();
+                    $city = City::create($validated);
+                    \DB::commit();
+                    $inserted[] = $city;
+                } catch (\Exception $e) {
+                    \DB::rollBack();
+                    $failed[] = "Row " . ($index + 1) . ": Save failed";
+                }
+            }
+
+            return Formatter::ApiResponse(200, count($inserted) ? 'Batch processed' : 'No data inserted', compact('inserted', 'failed'));
+        } catch (\Exception $e) {
+            return Formatter::ApiResponse(500, 'Processing failed', null, [$e->getMessage()]);
+        }
+    }
 }

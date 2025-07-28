@@ -22,8 +22,10 @@ Route::apiResource("jobTypes", \App\Http\Controllers\JobTypeController::class);
 Route::post("jobTypes/uploadBatchData", [\App\Http\Controllers\JobTypeController::class, "uploadBatchData"]);
 
 Route::apiResource("categories", \App\Http\Controllers\CategoryController::class);
+Route::post("categories/uploadBatchData", [\App\Http\Controllers\CategoryController::class, "uploadBatchData"]);
 
 Route::apiResource("itemTypes", \App\Http\Controllers\ItemTypeController::class);
+
 Route::apiResource("objectTypes", \App\Http\Controllers\ObjectTypeController::class);
 
 Route::apiResource("files", \App\Http\Controllers\FileController::class);

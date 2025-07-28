@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Category;
 use App\Models\City;
 use App\Models\Country;
+use App\Models\File;
 use App\Models\ItemType;
 use App\Models\JobType;
 use App\Models\ObjectType;
@@ -31,5 +32,6 @@ class DatabaseSeeder extends Seeder
         Category::factory(50)->create();
         ItemType::factory(50)->create();
         ObjectType::factory(50)->create();
+        File::factory(50)->create();
     }
 }

@@ -15,3 +15,5 @@ Route::apiResource("categories", \App\Http\Controllers\CategoryController::class
 
 Route::apiResource("itemTypes", \App\Http\Controllers\ItemTypeController::class);
 Route::apiResource("objectTypes", \App\Http\Controllers\ObjectTypeController::class);
+
+Route::apiResource("files", \App\Http\Controllers\FileController::class);

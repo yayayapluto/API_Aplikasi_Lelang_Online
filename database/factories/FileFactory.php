@@ -17,7 +17,7 @@ class FileFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            "file_url" => $this->faker->filePath()
         ];
     }
 }

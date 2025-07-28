@@ -14,5 +14,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        Country::factory(50)->create();
     }
 }

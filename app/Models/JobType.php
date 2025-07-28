@@ -9,4 +9,6 @@ class JobType extends Model
 {
     /** @use HasFactory<\Database\Factories\JobTypeFactory> */
     use HasFactory;
+
+    protected $fillable = ["nama"];
 }

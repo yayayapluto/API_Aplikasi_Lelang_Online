@@ -25,6 +25,7 @@ Route::apiResource("categories", \App\Http\Controllers\CategoryController::class
 Route::post("categories/uploadBatchData", [\App\Http\Controllers\CategoryController::class, "uploadBatchData"]);
 
 Route::apiResource("itemTypes", \App\Http\Controllers\ItemTypeController::class);
+Route::post("itemTypes/uploadBatchData", [\App\Http\Controllers\ItemTypeController::class, "uploadBatchData"]);
 
 Route::apiResource("objectTypes", \App\Http\Controllers\ObjectTypeController::class);
 

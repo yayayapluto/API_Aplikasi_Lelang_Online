@@ -9,4 +9,8 @@ class Province extends Model
 {
     /** @use HasFactory<\Database\Factories\ProvinceFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        "nama"
+    ];
 }

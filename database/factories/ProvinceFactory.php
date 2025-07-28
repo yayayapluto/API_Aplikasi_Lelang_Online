@@ -17,7 +17,7 @@ class ProvinceFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            "nama" => "Province " . $this->faker->unique()->word()
         ];
     }
 }

@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Country;
+use App\Models\Province;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -15,5 +16,6 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         Country::factory(50)->create();
+        Province::factory(50)->create();
     }
 }

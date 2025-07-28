@@ -9,4 +9,14 @@ class City extends Model
 {
     /** @use HasFactory<\Database\Factories\CityFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        "nama",
+        "province_id"
+    ];
+
+    public function province()
+    {
+        return $this->belongsTo(Province::class);
+    }
 }

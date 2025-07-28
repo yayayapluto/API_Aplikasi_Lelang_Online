@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\City;
 use App\Models\Country;
 use App\Models\Province;
 use App\Models\User;
@@ -17,5 +18,6 @@ class DatabaseSeeder extends Seeder
     {
         Country::factory(50)->create();
         Province::factory(50)->create();
+        City::factory(50)->create();
     }
 }

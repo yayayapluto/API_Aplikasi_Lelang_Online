@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Subdistrict;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,8 @@ class VillageFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            "nama" => "Kelurahan " . $this->faker->unique()->words(2, true),
+            "subdistrict_id" => Subdistrict::query()->pluck("id")->random()
         ];
     }
 }

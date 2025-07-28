@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('villages', function (Blueprint $table) {
             $table->id();
+            $table->string("nama")->unique();
+            $table->foreignId("subdistrict_id")->constrained("subdistricts")->cascadeOnDelete();
             $table->timestamps();
         });
     }

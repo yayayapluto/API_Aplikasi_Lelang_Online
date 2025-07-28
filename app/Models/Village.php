@@ -9,4 +9,14 @@ class Village extends Model
 {
     /** @use HasFactory<\Database\Factories\VillageFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        "nama",
+        "subdistrict_id"
+    ];
+
+    public function subdistrict()
+    {
+        return $this->belongsTo(Subdistrict::class);
+    }
 }

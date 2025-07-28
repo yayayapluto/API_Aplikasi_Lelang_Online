@@ -8,6 +8,7 @@ use App\Models\Province;
 use App\Models\Subdistrict;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Village;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -21,5 +22,6 @@ class DatabaseSeeder extends Seeder
         Province::factory(50)->create();
         City::factory(50)->create();
         Subdistrict::factory(50)->create();
+        Village::factory(50)->create();
     }
 }

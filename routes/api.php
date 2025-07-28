@@ -14,3 +14,4 @@ Route::apiResource("jobTypes", \App\Http\Controllers\JobTypeController::class);
 Route::apiResource("categories", \App\Http\Controllers\CategoryController::class);
 
 Route::apiResource("itemTypes", \App\Http\Controllers\ItemTypeController::class);
+Route::apiResource("objectTypes", \App\Http\Controllers\ObjectTypeController::class);

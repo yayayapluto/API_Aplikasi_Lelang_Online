@@ -7,6 +7,7 @@ use App\Models\City;
 use App\Models\Country;
 use App\Models\ItemType;
 use App\Models\JobType;
+use App\Models\ObjectType;
 use App\Models\Province;
 use App\Models\Subdistrict;
 use App\Models\User;
@@ -29,5 +30,6 @@ class DatabaseSeeder extends Seeder
         JobType::factory(50)->create();
         Category::factory(50)->create();
         ItemType::factory(50)->create();
+        ObjectType::factory(50)->create();
     }
 }

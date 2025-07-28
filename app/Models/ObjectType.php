@@ -9,4 +9,6 @@ class ObjectType extends Model
 {
     /** @use HasFactory<\Database\Factories\ObjectTypeFactory> */
     use HasFactory;
+
+    protected $fillable = ["nama"];
 }

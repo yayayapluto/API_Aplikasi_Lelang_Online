@@ -12,3 +12,5 @@ Route::apiResource("villages", \App\Http\Controllers\VillageController::class);
 Route::apiResource("jobTypes", \App\Http\Controllers\JobTypeController::class);
 
 Route::apiResource("categories", \App\Http\Controllers\CategoryController::class);
+
+Route::apiResource("itemTypes", \App\Http\Controllers\ItemTypeController::class);

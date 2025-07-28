@@ -9,4 +9,6 @@ class ItemType extends Model
 {
     /** @use HasFactory<\Database\Factories\ItemTypeFactory> */
     use HasFactory;
+
+    protected $fillable = ["nama"];
 }

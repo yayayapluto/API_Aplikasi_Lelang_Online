@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Category;
 use App\Models\City;
 use App\Models\Country;
+use App\Models\ItemType;
 use App\Models\JobType;
 use App\Models\Province;
 use App\Models\Subdistrict;
@@ -27,5 +28,6 @@ class DatabaseSeeder extends Seeder
         Village::factory(50)->create();
         JobType::factory(50)->create();
         Category::factory(50)->create();
+        ItemType::factory(50)->create();
     }
 }

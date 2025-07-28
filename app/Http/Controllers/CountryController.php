@@ -111,4 +111,83 @@ class CountryController extends Controller
         $country->delete();
         return Formatter::ApiResponse(200, "Country removed");
     }
+
+    public function uploadBatchData(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|file|mimes:json,csv|max:10240',
+        ]);
+
+        if ($validator->fails()) {
+            return Formatter::ApiResponse(422, 'Validation failed', null, $validator->errors()->all());
+        }
+
+        $file = $request->file('file');
+        $data = [];
+
+        try {
+            if ($file->getClientOriginalExtension() === 'json') {
+                $jsonContent = file_get_contents($file->getPathname());
+                $decoded = json_decode($jsonContent, true);
+
+                if (json_last_error() !== JSON_ERROR_NONE) {
+                    return Formatter::ApiResponse(422, 'Invalid JSON file');
+                }
+
+                $data = $decoded;
+            } elseif ($file->getClientOriginalExtension() === 'csv') {
+                $csv = array_map('str_getcsv', file($file->getPathname()));
+                $header = array_shift($csv);
+
+                foreach ($csv as $row) {
+                    if (count($row) === count($header)) {
+                        $data[] = array_combine($header, $row);
+                    }
+                }
+            }
+
+            $inserted = [];
+            $failed = [];
+
+            foreach ($data as $index => $row) {
+                $validator = Validator::make($row, [
+                    'nama' => 'required|string|max:255',
+                    'kode' => 'required|string|max:10',
+                    'nomor' => 'required|string|max:20',
+                ]);
+
+                if ($validator->fails()) {
+                    $failed[] = "Row " . ($index + 1) . ": " . implode(', ', $validator->errors()->all());
+                    continue;
+                }
+
+                $validated = $validator->validated();
+
+                $exists = Country::where('nama', $validated['nama'])
+                    ->orWhere('kode', $validated['kode'])
+                    ->orWhere('nomor', $validated['nomor'])
+                    ->exists();
+
+                if ($exists) {
+                    $failed[] = "Row " . ($index + 1) . ": Country with same name, code or number already exists";
+                    continue;
+                }
+
+                try {
+                    \DB::beginTransaction();
+                    $country = Country::create($validated);
+                    \DB::commit();
+                    $inserted[] = $country;
+                } catch (\Exception $e) {
+                    \DB::rollBack();
+                    $failed[] = "Row " . ($index + 1) . ": Save failed - " . $e->getMessage();
+                }
+            }
+
+            $message = count($inserted) > 0 ? 'Batch data processed' : 'No valid data to insert';
+            return Formatter::ApiResponse(200, $message, compact('inserted', 'failed'));
+        } catch (\Exception $e) {
+            return Formatter::ApiResponse(500, 'File processing failed', null, [$e->getMessage()]);
+        }
+    }
 }

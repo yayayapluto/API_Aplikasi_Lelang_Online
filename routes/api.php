@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::apiResource("countries", \App\Http\Controllers\CountryController::class);
+Route::post("countries/uploadBatchData", [\App\Http\Controllers\CountryController::class, "uploadBatchData"]);
+
 Route::apiResource("provinces", \App\Http\Controllers\ProvinceController::class);
 Route::apiResource("cities", \App\Http\Controllers\CityController::class);
 Route::apiResource("subdistricts", \App\Http\Controllers\SubdistrictController::class);

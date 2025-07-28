@@ -7,6 +7,9 @@ Route::apiResource("countries", \App\Http\Controllers\CountryController::class);
 Route::post("countries/uploadBatchData", [\App\Http\Controllers\CountryController::class, "uploadBatchData"]);
 
 Route::apiResource("provinces", \App\Http\Controllers\ProvinceController::class);
+Route::post("provinces/uploadBatchData", [\App\Http\Controllers\ProvinceController::class, "uploadBatchData"]);
+
+
 Route::apiResource("cities", \App\Http\Controllers\CityController::class);
 Route::apiResource("subdistricts", \App\Http\Controllers\SubdistrictController::class);
 Route::apiResource("villages", \App\Http\Controllers\VillageController::class);

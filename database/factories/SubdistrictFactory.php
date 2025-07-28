@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\City;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,8 @@ class SubdistrictFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            "nama" => "Kecamatan " . $this->faker->unique()->word(),
+            "city_id" => City::query()->pluck("id")->random()
         ];
     }
 }

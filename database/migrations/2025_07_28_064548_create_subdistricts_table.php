@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('subdistricts', function (Blueprint $table) {
             $table->id();
+            $table->string("nama");
+            $table->foreignId("city_id");
             $table->timestamps();
         });
     }

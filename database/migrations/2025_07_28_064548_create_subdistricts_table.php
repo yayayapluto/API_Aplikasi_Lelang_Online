@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('subdistricts', function (Blueprint $table) {
             $table->id();
             $table->string("nama")->unique();
-            $table->foreignId("city_id")->constrained("cities")->cascadeOnDelete();
+            $table->integer("fullCode")->unique();
+            $table->integer("code")->unique()->nullable();
             $table->timestamps();
         });
     }

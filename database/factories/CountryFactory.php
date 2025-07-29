@@ -18,7 +18,9 @@ class CountryFactory extends Factory
     public function definition(): array
     {
         return [
-
+            "nama" => $this->faker->unique()->country(),
+            "kode" => $this->faker->unique()->countryCode(),
+            "nomor" => $this->faker->unique()->numberBetween(10, 99)
         ];
     }
 }

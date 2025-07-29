@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Province;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,8 @@ class CityFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            "nama" => "Kota " . $this->faker->unique()->word(),
+            "province_id" => Province::query()->pluck("id")->random()
         ];
     }
 }

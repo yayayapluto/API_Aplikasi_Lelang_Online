@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('provinces', function (Blueprint $table) {
             $table->id();
             $table->string("nama")->unique();
+            $table->integer("fullCode")->unique();
+            $table->integer("code")->unique();
             $table->timestamps();
         });
     }

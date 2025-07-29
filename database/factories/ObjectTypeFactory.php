@@ -17,7 +17,7 @@ class ObjectTypeFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            "nama" => "Tipe objek " . $this->faker->unique()->words(3, true)
         ];
     }
 }

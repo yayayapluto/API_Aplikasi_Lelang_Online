@@ -17,7 +17,11 @@ class CategoryFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            "nama" => "Kategori " . $this->faker->unique()->words(2, true),
+            "status" => $this->faker->randomElement(["TAYANG", "TIDAK_TAYANG"]),
+            "ikon" => "ikon",
+            "tipe_ikon" => "md",
+            "nama_ikon" => "ikon-keren"
         ];
     }
 }

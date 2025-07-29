@@ -17,7 +17,7 @@ class JobTypeFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            "nama" => "Pekerjaan " . $this->faker->unique()->words(2, true)
         ];
     }
 }

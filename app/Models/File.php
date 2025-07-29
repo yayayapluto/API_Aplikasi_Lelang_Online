@@ -9,4 +9,6 @@ class File extends Model
 {
     /** @use HasFactory<\Database\Factories\FileFactory> */
     use HasFactory;
+
+    protected $fillable = ["file_url"];
 }

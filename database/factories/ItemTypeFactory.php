@@ -17,7 +17,7 @@ class ItemTypeFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            "nama" => "Tipe " . $this->faker->unique()->words(3, true)
         ];
     }
 }

@@ -16,12 +16,18 @@ Route::apiResource("subdistricts", \App\Http\Controllers\SubdistrictController::
 Route::post("subdistricts/uploadBatchData", [\App\Http\Controllers\SubdistrictController::class, "uploadBatchData"]);
 
 Route::apiResource("villages", \App\Http\Controllers\VillageController::class);
+Route::post("villages/uploadBatchData", [\App\Http\Controllers\VillageController::class, "uploadBatchData"]);
 
 Route::apiResource("jobTypes", \App\Http\Controllers\JobTypeController::class);
+Route::post("jobTypes/uploadBatchData", [\App\Http\Controllers\JobTypeController::class, "uploadBatchData"]);
 
 Route::apiResource("categories", \App\Http\Controllers\CategoryController::class);
+Route::post("categories/uploadBatchData", [\App\Http\Controllers\CategoryController::class, "uploadBatchData"]);
 
 Route::apiResource("itemTypes", \App\Http\Controllers\ItemTypeController::class);
+Route::post("itemTypes/uploadBatchData", [\App\Http\Controllers\ItemTypeController::class, "uploadBatchData"]);
+
 Route::apiResource("objectTypes", \App\Http\Controllers\ObjectTypeController::class);
+Route::post("objectTypes/uploadBatchData", [\App\Http\Controllers\ObjectTypeController::class, "uploadBatchData"]);
 
 Route::apiResource("files", \App\Http\Controllers\FileController::class);

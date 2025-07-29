@@ -19,7 +19,8 @@ class CityFactory extends Factory
     {
         return [
             "nama" => "Kota " . $this->faker->unique()->word(),
-            "province_id" => Province::query()->pluck("id")->random()
+            "fullCode" => $this->faker->numerify("####"),
+            "code" => null
         ];
     }
 }

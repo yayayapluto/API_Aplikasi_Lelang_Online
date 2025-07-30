@@ -10,6 +10,7 @@ use App\Models\ItemType;
 use App\Models\JobType;
 use App\Models\Kpknl;
 use App\Models\ObjectType;
+use App\Models\Organizer;
 use App\Models\Province;
 use App\Models\Subdistrict;
 use App\Models\User;
@@ -36,5 +37,6 @@ class DatabaseSeeder extends Seeder
         File::factory(50)->create();
 
         Kpknl::factory(50)->create();
+        Organizer::factory(50)->create();
     }
 }

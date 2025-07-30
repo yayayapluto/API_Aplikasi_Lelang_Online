@@ -12,7 +12,9 @@ class Village extends Model
 
     protected $fillable = [
         "nama",
-        "subdistrict_id"
+        "fullCode",
+        "code",
+        "kode_pos"
     ];
 
     public function subdistrict()

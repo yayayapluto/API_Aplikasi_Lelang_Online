@@ -116,9 +116,9 @@ class CategoryController extends Controller
                 $v = Validator::make($row, [
                     'nama' => 'required|string|unique:categories,nama',
                     'status' => 'sometimes|in:TAYANG,TIDAK_TAYANG',
-                    'ikon' => 'nullable|string',
-                    'tipe_ikon' => 'nullable|string',
-                    'nama_ikon' => 'nullable|string',
+                    'ikon' => 'required|string',
+                    'tipe_ikon' => 'required|string',
+                    'nama_ikon' => 'required|string',
                 ]);
                 if ($v->fails()) {
                     $failed[] = "Row " . ($index + 1) . ": " . implode(', ', $v->errors()->all());
@@ -132,7 +132,7 @@ class CategoryController extends Controller
                     $inserted[] = $cat;
                 } catch (\Exception $e) {
                     \DB::rollBack();
-                    $failed[] = "Row " . ($index + 1) . ": Save failed";
+                    $failed[] = "Row " . ($index + 1) . ": Save failed " . $e->getMessage();
                 }
             }
 

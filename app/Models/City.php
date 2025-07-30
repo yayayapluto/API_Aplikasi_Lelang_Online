@@ -15,4 +15,11 @@ class City extends Model
         "fullCode",
         "code"
     ];
+
+    // contoh
+    //  {
+    //    "nama": "KAB. ACEH BARAT",
+    //    "fullCode": "1105",
+    //    "code": null
+    //  }
 }

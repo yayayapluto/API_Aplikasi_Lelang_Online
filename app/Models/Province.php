@@ -15,4 +15,11 @@ class Province extends Model
         "fullCode",
         "code"
     ];
+
+    // contoh
+    //  {
+    //    "nama": "ACEH",
+    //    "fullCode": "11",
+    //    "code": "11"
+    //  }
 }

@@ -17,8 +17,11 @@ class Village extends Model
         "kode_pos"
     ];
 
-    public function subdistrict()
-    {
-        return $this->belongsTo(Subdistrict::class);
-    }
+    // contoh
+    //  {
+    //    "nama": "ALUE BAKONG",
+    //    "kode_pos": "23652",
+    //    "fullCode": "1105062002",
+    //    "code": null
+    //  }
 }

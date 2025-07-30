@@ -16,8 +16,10 @@ class Subdistrict extends Model
         "code"
     ];
 
-    public function City()
-    {
-        return $this->belongsTo(City::class);
-    }
+    // contoh
+    //  {
+    //    "nama": "BUBON",
+    //    "fullCode": "110506",
+    //    "code": null
+    //  }
 }

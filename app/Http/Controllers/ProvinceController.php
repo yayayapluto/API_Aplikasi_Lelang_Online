@@ -40,16 +40,17 @@ class ProvinceController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'nama' => 'required|string|unique:provinces,nama',
+            'code' => 'required|integer|unique:provinces,code',
+            'fullCode' => 'required|integer|unique:provinces,fullCode',
         ]);
 
         if ($validator->fails()) {
             return Formatter::ApiResponse(422, "Validation failed", null, $validator->errors()->all());
         }
 
-        $validated = $validator->validated();
-        $newProvince = Province::create($validated);
+        $province = Province::create($validator->validated());
 
-        return Formatter::ApiResponse(200, "Province added", Province::find($newProvince->id));
+        return Formatter::ApiResponse(200, "Province added", Province::find($province->id));
     }
 
     /**
@@ -67,14 +68,15 @@ class ProvinceController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'nama' => 'sometimes|required|string|unique:provinces,nama,' . $province->id,
+            'code' => 'sometimes|required|integer|unique:provinces,code,' . $province->id,
+            'fullCode' => 'sometimes|required|integer|unique:provinces,fullCode,' . $province->id,
         ]);
 
         if ($validator->fails()) {
             return Formatter::ApiResponse(422, "Validation failed", null, $validator->errors()->all());
         }
 
-        $validated = $validator->validated();
-        $province->update($validated);
+        $province->update($validator->validated());
 
         return Formatter::ApiResponse(200, "Province updated", Province::find($province->id));
     }
@@ -85,10 +87,12 @@ class ProvinceController extends Controller
     public function destroy(Province $province)
     {
         $province->delete();
-
         return Formatter::ApiResponse(200, "Province removed");
     }
 
+    /**
+     * Upload batch data from JSON or CSV
+     */
     public function uploadBatchData(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -105,7 +109,9 @@ class ProvinceController extends Controller
         try {
             if ($file->getClientOriginalExtension() === 'json') {
                 $json = json_decode(file_get_contents($file), true);
-                if (json_last_error() !== JSON_ERROR_NONE) return Formatter::ApiResponse(422, 'Invalid JSON');
+                if (json_last_error() !== JSON_ERROR_NONE) {
+                    return Formatter::ApiResponse(422, 'Invalid JSON file');
+                }
                 $data = $json;
             } elseif ($file->getClientOriginalExtension() === 'csv') {
                 $csv = array_map('str_getcsv', file($file->getPathname()));
@@ -121,15 +127,30 @@ class ProvinceController extends Controller
             $failed = [];
 
             foreach ($data as $index => $row) {
-                $v = Validator::make($row, ['nama' => 'required|string|max:255']);
+                $v = Validator::make($row, [
+                    'nama' => 'required|string|max:255',
+                    'code' => 'required|integer',
+                    'fullCode' => 'required|integer',
+                ]);
+
                 if ($v->fails()) {
                     $failed[] = "Row " . ($index + 1) . ": " . implode(', ', $v->errors()->all());
                     continue;
                 }
 
                 $validated = $v->validated();
+
+                // Check uniqueness
                 if (Province::where('nama', $validated['nama'])->exists()) {
-                    $failed[] = "Row " . ($index + 1) . ": Province already exists";
+                    $failed[] = "Row " . ($index + 1) . ": Province name already exists";
+                    continue;
+                }
+                if (Province::where('code', $validated['code'])->exists()) {
+                    $failed[] = "Row " . ($index + 1) . ": Code already taken";
+                    continue;
+                }
+                if (Province::where('fullCode', $validated['fullCode'])->exists()) {
+                    $failed[] = "Row " . ($index + 1) . ": Full code already taken";
                     continue;
                 }
 

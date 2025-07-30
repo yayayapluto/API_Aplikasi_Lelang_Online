@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Validator;
 
 class SubdistrictController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
         $subdistrictQuery = Subdistrict::query();
@@ -18,23 +21,27 @@ class SubdistrictController extends Controller
             $subdistrictQuery->where('nama', 'LIKE', $searchTerm);
         }
 
-        $validColumns = ['nama', 'city_id'];
+        $validColumns = ['nama'];
         $sortBy = in_array(request()->sortBy, $validColumns) ? request()->sortBy : 'created_at';
         $sortDir = strtolower(request()->sortDir) === 'desc' ? 'DESC' : 'ASC';
         $subdistrictQuery->orderBy($sortBy, $sortDir);
 
         $size = min(max(request()->size ?? 10, 1), 100);
 
-        $subdistricts = $subdistrictQuery->with('city')->simplePaginate($size);
+        $subdistricts = $subdistrictQuery->simplePaginate($size);
 
         return Formatter::ApiResponse(200, 'Subdistrict list retrieved', $subdistricts);
     }
 
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nama' => 'required|string|unique:subdistricts,nama,NULL,id,city_id,' . $request->city_id,
-            'city_id' => 'required|exists:cities,id',
+            'nama' => 'required|string|unique:subdistricts,nama',
+            'fullCode' => 'required|integer|unique:subdistricts,fullCode',
+            'code' => 'nullable|integer|unique:subdistricts,code',
         ]);
 
         if ($validator->fails()) {
@@ -42,22 +49,28 @@ class SubdistrictController extends Controller
         }
 
         $validated = $validator->validated();
-        $newSubdistrict = Subdistrict::create($validated);
+        $subdistrict = Subdistrict::create($validated);
 
-        return Formatter::ApiResponse(200, 'Subdistrict added', Subdistrict::with('city')->find($newSubdistrict->id));
+        return Formatter::ApiResponse(200, 'Subdistrict added', Subdistrict::find($subdistrict->id));
     }
 
+    /**
+     * Display the specified resource.
+     */
     public function show(Subdistrict $subdistrict)
     {
-        $subdistrict = $subdistrict->load('city');
         return Formatter::ApiResponse(200, 'Subdistrict found', $subdistrict);
     }
 
+    /**
+     * Update the specified resource in storage.
+     */
     public function update(Request $request, Subdistrict $subdistrict)
     {
         $validator = Validator::make($request->all(), [
-            'nama' => 'sometimes|required|string|unique:subdistricts,nama,' . $subdistrict->id . ',id,city_id,' . $subdistrict->city_id,
-            'city_id' => 'sometimes|required|exists:cities,id',
+            'nama' => 'sometimes|required|string|unique:subdistricts,nama,' . $subdistrict->id,
+            'fullCode' => 'sometimes|required|integer|unique:subdistricts,fullCode,' . $subdistrict->id,
+            'code' => 'nullable|integer|unique:subdistricts,code,' . $subdistrict->id,
         ]);
 
         if ($validator->fails()) {
@@ -67,15 +80,21 @@ class SubdistrictController extends Controller
         $validated = $validator->validated();
         $subdistrict->update($validated);
 
-        return Formatter::ApiResponse(200, 'Subdistrict updated', Subdistrict::with('city')->find($subdistrict->id));
+        return Formatter::ApiResponse(200, 'Subdistrict updated', Subdistrict::find($subdistrict->id));
     }
 
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy(Subdistrict $subdistrict)
     {
         $subdistrict->delete();
         return Formatter::ApiResponse(200, 'Subdistrict removed');
     }
 
+    /**
+     * Upload batch data from JSON or CSV
+     */
     public function uploadBatchData(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -92,7 +111,9 @@ class SubdistrictController extends Controller
         try {
             if ($file->getClientOriginalExtension() === 'json') {
                 $json = json_decode(file_get_contents($file), true);
-                if (json_last_error() !== JSON_ERROR_NONE) return Formatter::ApiResponse(422, 'Invalid JSON');
+                if (json_last_error() !== JSON_ERROR_NONE) {
+                    return Formatter::ApiResponse(422, 'Invalid JSON file');
+                }
                 $data = $json;
             } elseif ($file->getClientOriginalExtension() === 'csv') {
                 $csv = array_map('str_getcsv', file($file->getPathname()));
@@ -110,24 +131,37 @@ class SubdistrictController extends Controller
             foreach ($data as $index => $row) {
                 $v = Validator::make($row, [
                     'nama' => 'required|string|max:255',
-                    'city_id' => 'required|exists:cities,id',
+                    'fullCode' => 'required|integer',
+                    'code' => 'nullable|integer',
                 ]);
+
                 if ($v->fails()) {
                     $failed[] = "Row " . ($index + 1) . ": " . implode(', ', $v->errors()->all());
                     continue;
                 }
 
                 $validated = $v->validated();
-                if (Subdistrict::where('nama', $validated['nama'])->where('city_id', $validated['city_id'])->exists()) {
-                    $failed[] = "Row " . ($index + 1) . ": Subdistrict already exists in this city";
+
+                if (Subdistrict::where('nama', $validated['nama'])->exists()) {
+                    $failed[] = "Row " . ($index + 1) . ": Subdistrict name already exists";
+                    continue;
+                }
+
+                if (Subdistrict::where('fullCode', $validated['fullCode'])->exists()) {
+                    $failed[] = "Row " . ($index + 1) . ": Full code already exists";
+                    continue;
+                }
+
+                if (!empty($validated['code']) && Subdistrict::where('code', $validated['code'])->where('id', '!=', $validated['id'] ?? 0)->exists()) {
+                    $failed[] = "Row " . ($index + 1) . ": Code already exists";
                     continue;
                 }
 
                 try {
                     \DB::beginTransaction();
-                    $sub = Subdistrict::create($validated);
+                    $subdistrict = Subdistrict::create($validated);
                     \DB::commit();
-                    $inserted[] = $sub;
+                    $inserted[] = $subdistrict;
                 } catch (\Exception $e) {
                     \DB::rollBack();
                     $failed[] = "Row " . ($index + 1) . ": Save failed";

@@ -12,7 +12,8 @@ class Subdistrict extends Model
 
     protected $fillable = [
         "nama",
-        "city_id"
+        "fullCode",
+        "code"
     ];
 
     public function City()

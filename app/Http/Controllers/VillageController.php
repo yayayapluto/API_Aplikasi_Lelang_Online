@@ -102,6 +102,8 @@ class VillageController extends Controller
         $validator = Validator::make($request->all(), [
             'file' => 'required|file|max:10240',
         ]);
+  
+  // mimes:json,csv diapus soalnya gatau kenapa error deh
 
 //        dd($request->file("file")->getClientOriginalExtension());
 
@@ -139,7 +141,6 @@ class VillageController extends Controller
                     'code' => 'nullable|integer',
                     'kode_pos' => 'required|integer',
                 ]);
-
                 if ($v->fails()) {
                     $failed[] = "Row " . ($index + 1) . ": " . implode(', ', $v->errors()->all());
                     continue;
@@ -164,6 +165,9 @@ class VillageController extends Controller
 
                 if (Village::where('kode_pos', $validated['kode_pos'])->exists()) {
                     $failed[] = "Row " . ($index + 1) . ": Kode pos already exists";
+
+                if (Village::where('nama', $validated['nama'])->where('subdistrict_id', $validated['subdistrict_id'])->exists()) {
+                    $failed[] = "Row " . ($index + 1) . ": Village already exists in this subdistrict";
                     continue;
                 }
 

@@ -12,11 +12,7 @@ class City extends Model
 
     protected $fillable = [
         "nama",
-        "province_id"
+        "fullCode",
+        "code"
     ];
-
-    public function province()
-    {
-        return $this->belongsTo(Province::class);
-    }
 }

@@ -16,8 +16,11 @@ class ProvinceFactory extends Factory
      */
     public function definition(): array
     {
+        $code = $this->faker->unique()->numerify("##");
         return [
-            "nama" => "Province " . $this->faker->unique()->word()
+            "nama" => "Province " . $this->faker->unique()->word(),
+            "fullCode" => $code,
+            "code" => $code,
         ];
     }
 }

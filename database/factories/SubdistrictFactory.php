@@ -19,7 +19,8 @@ class SubdistrictFactory extends Factory
     {
         return [
             "nama" => "Kecamatan " . $this->faker->unique()->word(),
-            "city_id" => City::query()->pluck("id")->random()
+            "fullCode" => $this->faker->numerify("######"),
+            "code" => null
         ];
     }
 }

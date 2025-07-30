@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->string("nama")->unique();
-            $table->enum("status", ["TAYANG","TIDAK_TAYANG"]);
+            $table->enum("status", ["TAYANG","TIDAK_TAYANG"])->default("TAYANG");
             $table->string("ikon");
             $table->string("tipe_ikon");
             $table->string("nama_ikon");

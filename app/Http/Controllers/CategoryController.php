@@ -115,7 +115,7 @@ class CategoryController extends Controller
             foreach ($data as $index => $row) {
                 $v = Validator::make($row, [
                     'nama' => 'required|string|unique:categories,nama',
-                    'status' => 'required|in:TAYANG,TIDAK_TAYANG',
+                    'status' => 'sometimes|in:TAYANG,TIDAK_TAYANG',
                     'ikon' => 'nullable|string',
                     'tipe_ikon' => 'nullable|string',
                     'nama_ikon' => 'nullable|string',

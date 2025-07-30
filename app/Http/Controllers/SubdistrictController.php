@@ -21,6 +21,13 @@ class SubdistrictController extends Controller
             $subdistrictQuery->where('nama', 'LIKE', $searchTerm);
         }
 
+        if (request()->filled('cityCode')) {
+            $cityCode = request()->cityCode;
+            if (is_string($cityCode) && strlen($cityCode) == 4 && ctype_digit($cityCode)) {
+                $subdistrictQuery->where('fullCode', 'LIKE', $cityCode . '%');
+            }
+        }
+
         $validColumns = ['nama'];
         $sortBy = in_array(request()->sortBy, $validColumns) ? request()->sortBy : 'created_at';
         $sortDir = strtolower(request()->sortDir) === 'desc' ? 'DESC' : 'ASC';

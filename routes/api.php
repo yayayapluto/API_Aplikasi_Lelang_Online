@@ -31,3 +31,6 @@ Route::apiResource("objectTypes", \App\Http\Controllers\ObjectTypeController::cl
 Route::post("objectTypes/uploadBatchData", [\App\Http\Controllers\ObjectTypeController::class, "uploadBatchData"]);
 
 Route::apiResource("files", \App\Http\Controllers\FileController::class);
+
+Route::apiResource("kpknl", \App\Http\Controllers\KpknlController::class);
+Route::post("kpknl/uploadBatchData", [\App\Http\Controllers\KpknlController::class, "uploadBatchData"]);

@@ -16,6 +16,8 @@ Route::apiResource("subdistricts", \App\Http\Controllers\SubdistrictController::
 Route::post("subdistricts/uploadBatchData", [\App\Http\Controllers\SubdistrictController::class, "uploadBatchData"]);
 
 Route::apiResource("villages", \App\Http\Controllers\VillageController::class);
+Route::post("villages/uploadBatchData", [\App\Http\Controllers\VillageController::class, "uploadBatchData"]);
+
 
 Route::apiResource("jobTypes", \App\Http\Controllers\JobTypeController::class);
 

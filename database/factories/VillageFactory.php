@@ -19,7 +19,9 @@ class VillageFactory extends Factory
     {
         return [
             "nama" => "Kelurahan " . $this->faker->unique()->words(2, true),
-            "subdistrict_id" => Subdistrict::query()->pluck("id")->random()
+            "fullCode" => $this->faker->numerify("########"),
+            "code" => null,
+            "kode_pos" => $this->faker->numerify("#####")
         ];
     }
 }

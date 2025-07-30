@@ -19,7 +19,7 @@ class CityFactory extends Factory
     {
         return [
             "nama" => "Kota " . $this->faker->unique()->word(),
-            "fullCode" => $this->faker->numerify("####"),
+            "fullCode" => $this->faker->unique()->numerify("####"),
             "code" => null
         ];
     }

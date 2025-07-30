@@ -21,6 +21,13 @@ class CityController extends Controller
             $cityQuery->where('nama', 'LIKE', $searchTerm);
         }
 
+        if (request()->filled('provinceCode')) {
+            $provinceCode = request()->provinceCode;
+            if (is_string($provinceCode) && strlen($provinceCode) == 2 && ctype_digit($provinceCode)) {
+                $cityQuery->where('fullCode', 'LIKE', $provinceCode . '%');
+            }
+        }
+
         $validColumns = ['nama'];
         $sortBy = in_array(request()->sortBy, $validColumns) ? request()->sortBy : 'created_at';
         $sortDir = strtolower(request()->sortDir) === 'desc' ? 'DESC' : 'ASC';

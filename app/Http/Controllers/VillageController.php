@@ -21,6 +21,13 @@ class VillageController extends Controller
             $villageQuery->where('nama', 'LIKE', $searchTerm);
         }
 
+        if (request()->filled('subdistrictCode')) {
+            $subdistrictCode = request()->subdistrictCode;
+            if (is_string($subdistrictCode) && strlen($subdistrictCode) == 6 && ctype_digit($subdistrictCode)) {
+                $villageQuery->where('fullCode', 'LIKE', $subdistrictCode . '%');
+            }
+        }
+
         $validColumns = ['nama'];
         $sortBy = in_array(request()->sortBy, $validColumns) ? request()->sortBy : 'created_at';
         $sortDir = strtolower(request()->sortDir) === 'desc' ? 'DESC' : 'ASC';

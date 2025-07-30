@@ -102,10 +102,6 @@ class VillageController extends Controller
         $validator = Validator::make($request->all(), [
             'file' => 'required|file|max:10240',
         ]);
-  
-  // mimes:json,csv diapus soalnya gatau kenapa error deh
-
-//        dd($request->file("file")->getClientOriginalExtension());
 
         if ($validator->fails()) {
             return Formatter::ApiResponse(422, 'Validation failed', null, $validator->errors()->all());
@@ -141,6 +137,7 @@ class VillageController extends Controller
                     'code' => 'nullable|integer',
                     'kode_pos' => 'required|integer',
                 ]);
+
                 if ($v->fails()) {
                     $failed[] = "Row " . ($index + 1) . ": " . implode(', ', $v->errors()->all());
                     continue;
@@ -148,26 +145,19 @@ class VillageController extends Controller
 
                 $validated = $v->validated();
 
-                if (Village::where('nama', $validated['nama'])->exists()) {
-                    $failed[] = "Row " . ($index + 1) . ": Village name already exists";
-                    continue;
-                }
+                // Check uniqueness
+                $nameExists = Village::where('nama', $validated['nama'])->exists();
+                $fullCodeExists = Village::where('fullCode', $validated['fullCode'])->exists();
+                $codeExists = !empty($validated['code']) && Village::where('code', $validated['code'])->where('id', '!=', $validated['id'] ?? 0)->exists();
+                $kodePosExists = Village::where('kode_pos', $validated['kode_pos'])->exists();
 
-                if (Village::where('fullCode', $validated['fullCode'])->exists()) {
-                    $failed[] = "Row " . ($index + 1) . ": Full code already exists";
-                    continue;
-                }
-
-                if (!empty($validated['code']) && Village::where('code', $validated['code'])->where('id', '!=', $validated['id'] ?? 0)->exists()) {
-                    $failed[] = "Row " . ($index + 1) . ": Code already exists";
-                    continue;
-                }
-
-                if (Village::where('kode_pos', $validated['kode_pos'])->exists()) {
-                    $failed[] = "Row " . ($index + 1) . ": Kode pos already exists";
-
-                if (Village::where('nama', $validated['nama'])->where('subdistrict_id', $validated['subdistrict_id'])->exists()) {
-                    $failed[] = "Row " . ($index + 1) . ": Village already exists in this subdistrict";
+                if ($nameExists || $fullCodeExists || $codeExists || $kodePosExists) {
+                    $errors = [];
+                    if ($nameExists) $errors[] = 'Name already exists';
+                    if ($fullCodeExists) $errors[] = 'Full code already exists';
+                    if ($codeExists) $errors[] = 'Code already exists';
+                    if ($kodePosExists) $errors[] = 'Kode pos already exists';
+                    $failed[] = "Row " . ($index + 1) . ": " . implode(', ', $errors);
                     continue;
                 }
 
@@ -178,7 +168,7 @@ class VillageController extends Controller
                     $inserted[] = $village;
                 } catch (\Exception $e) {
                     \DB::rollBack();
-                    $failed[] = "Row " . ($index + 1) . ": Save failed";
+                    $failed[] = "Row " . ($index + 1) . ": Save failed - " . $e->getMessage();
                 }
             }
 

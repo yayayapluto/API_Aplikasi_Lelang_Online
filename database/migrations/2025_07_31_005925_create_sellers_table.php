@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('sellers', function (Blueprint $table) {
             $table->id();
+            $table->string("nama")->unique();
+            $table->string("nomor_telepon")->unique();
+            $table->text("alamat");
+            $table->foreignId("province_id")->constrained("provinces")->cascadeOnDelete();
+            $table->foreignId("city_id")->constrained("cities")->cascadeOnDelete();
             $table->timestamps();
         });
     }

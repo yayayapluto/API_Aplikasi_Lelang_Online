@@ -38,5 +38,7 @@ class DatabaseSeeder extends Seeder
 
         Kpknl::factory(50)->create();
         Organizer::factory(50)->create();
+
+        User::factory(50)->create();
     }
 }

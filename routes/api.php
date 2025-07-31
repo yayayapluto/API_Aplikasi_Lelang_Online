@@ -37,3 +37,5 @@ Route::post("kpknl/uploadBatchData", [\App\Http\Controllers\KpknlController::cla
 
 Route::apiResource("organizers", \App\Http\Controllers\OrganizerController::class);
 Route::post("organizers/uploadBatchData", [\App\Http\Controllers\OrganizerController::class, "uploadBatchData"]);
+
+Route::apiResource("users", \App\Http\Controllers\UserController::class);

@@ -12,6 +12,7 @@ use App\Models\Kpknl;
 use App\Models\ObjectType;
 use App\Models\Organizer;
 use App\Models\Province;
+use App\Models\Seller;
 use App\Models\Subdistrict;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -40,5 +41,6 @@ class DatabaseSeeder extends Seeder
         Organizer::factory(50)->create();
 
         User::factory(50)->create();
+        Seller::factory(50)->create();
     }
 }

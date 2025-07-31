@@ -39,3 +39,5 @@ Route::apiResource("organizers", \App\Http\Controllers\OrganizerController::clas
 Route::post("organizers/uploadBatchData", [\App\Http\Controllers\OrganizerController::class, "uploadBatchData"]);
 
 Route::apiResource("users", \App\Http\Controllers\UserController::class);
+
+Route::apiResource("sellers", \App\Http\Controllers\SellerController::class);

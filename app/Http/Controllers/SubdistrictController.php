@@ -28,7 +28,7 @@ class SubdistrictController extends Controller
             }
         }
 
-        $validColumns = ['nama'];
+        $validColumns = ['nama', "fullCode", "code"];
         $sortBy = in_array(request()->sortBy, $validColumns) ? request()->sortBy : 'created_at';
         $sortDir = strtolower(request()->sortDir) === 'desc' ? 'DESC' : 'ASC';
         $subdistrictQuery->orderBy($sortBy, $sortDir);

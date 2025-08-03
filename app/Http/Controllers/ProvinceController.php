@@ -21,7 +21,7 @@ class ProvinceController extends Controller
             $provinceQuery->where('nama', 'LIKE', $searchTerm);
         }
 
-        $validColumns = ["nama"];
+        $validColumns = ["nama", "fullCode", "code"];
         $sortBy = in_array(request()->sortBy, $validColumns) ? request()->sortBy : 'created_at';
         $sortDir = strtolower(request()->sortDir) === 'desc' ? 'DESC' : 'ASC';
         $provinceQuery->orderBy($sortBy, $sortDir);

@@ -18,7 +18,7 @@ class CategoryController extends Controller
             $categoryQuery->where('nama', 'LIKE', $searchTerm);
         }
 
-        $validColumns = ['nama', 'status', 'created_at'];
+        $validColumns = ['nama', 'status', "tipe_ikon", 'created_at'];
         $sortBy = in_array(request()->sortBy, $validColumns) ? request()->sortBy : 'created_at';
         $sortDir = strtolower(request()->sortDir) === 'desc' ? 'DESC' : 'ASC';
         $categoryQuery->orderBy($sortBy, $sortDir);

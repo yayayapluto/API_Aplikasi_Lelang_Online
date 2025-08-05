@@ -75,22 +75,24 @@ class UserController extends Controller
 
         $validated = $validator->validated();
 
-        // Handle file upload
         $file = $request->file('file_ktp');
-        $path = $file->store('files', 'public'); // e.g. files/abc123.pdf
+        $filename = 'uploads/' . uniqid() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
+        $file->storeAs('public/' . $filename);
+        $fileUrl = 'storage/' . $filename;
 
-        // Save file record in database
-        $fileRecord = File::query()->create([
-            'file_url' => 'storage/' . $path, // accessible URL
+        $storedFile = File::create([
+            'file_url' => $fileUrl,
         ]);
 
-        $validated['file_ktp'] = $fileRecord->file_url;
+        $validated['file_id'] = $storedFile->id;
+        unset($validated['file_ktp']);
         $validated['password'] = bcrypt($validated['password']);
 
         $user = User::create($validated);
 
         return Formatter::ApiResponse(200, 'User added', User::with([
             'jobType',
+            'file',
             'province',
             'country',
             'city',
@@ -122,21 +124,21 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'job_type_id' => 'sometimes|required|exists:job_types,id',
-            'province_id' => 'sometimes|required|exists:provinces,id',
+            'province_id' => 'sometimes|exists:provinces,id',
             'kewarganegaraan' => 'sometimes|required|in:WNA,WNI',
             'nik' => 'sometimes|required|string|unique:users,nik,' . $user->id,
             'nama_lengkap' => 'sometimes|required|string|max:255',
             'country_id' => 'nullable|exists:countries,id',
             'jenis_kelamin' => 'sometimes|required|in:PRIA,WANITA',
-            'city_id' => 'sometimes|required|exists:cities,id',
+            'city_id' => 'sometimes|exists:cities,id',
             'tempat_lahir' => 'sometimes|required|string',
             'tanggal_lahir' => 'sometimes|required|date',
             'nomor_telepon' => 'sometimes|required|string',
             'alamat' => 'sometimes|required|string',
             'file_ktp' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'subdistrict_id' => 'sometimes|required|exists:subdistricts,id',
+            'subdistrict_id' => 'sometimes|exists:subdistricts,id',
             'email' => 'sometimes|required|email|unique:users,email,' . $user->id,
-            'village_id' => 'sometimes|required|exists:villages,id',
+            'village_id' => 'sometimes|exists:villages,id',
             'password' => 'nullable|string|min:6|confirmed',
         ]);
 
@@ -146,30 +148,26 @@ class UserController extends Controller
 
         $validated = $validator->validated();
 
-        // Handle file replacement
         if ($request->hasFile('file_ktp')) {
-            // Delete old file from storage and DB
+            $file = $request->file('file_ktp');
+            $filename = 'uploads/' . uniqid() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
+            $file->storeAs('public/' . $filename);
+
+            $fileUrl = 'storage/' . $filename;
+            $storedFile = File::create([
+                'file_url' => $fileUrl,
+            ]);
+
             if ($user->file) {
                 $oldPath = str_replace('storage/', 'public/', $user->file->file_url);
-                if (Storage::exists($oldPath)) {
-                    Storage::delete($oldPath);
-                }
+                Storage::delete($oldPath);
                 $user->file->delete();
             }
 
-            // Store new file
-            $file = $request->file('file_ktp');
-            $path = $file->store('files', 'public');
-
-            $fileRecord = File::query()->create([
-                'file_url' => 'storage/' . $path,
-            ]);
-
-            $validated['file_ktp'] = $fileRecord->file_url;
-
+            $validated['file_id'] = $storedFile->id;
+            unset($validated['file_ktp']);
         }
 
-        // Hash password if provided
         if (isset($validated['password'])) {
             $validated['password'] = bcrypt($validated['password']);
         }
@@ -178,6 +176,7 @@ class UserController extends Controller
 
         return Formatter::ApiResponse(200, 'User updated', User::with([
             'jobType',
+            'file',
             'province',
             'country',
             'city',

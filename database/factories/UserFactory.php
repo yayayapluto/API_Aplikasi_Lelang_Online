@@ -51,7 +51,7 @@ class UserFactory extends Factory
             'tanggal_lahir' => $this->faker->date('Y-m-d', '2005-01-01'),
             'nomor_telepon' => $this->faker->phoneNumber,
             'alamat' => $this->faker->address,
-            'file_ktp' => $file->file_url,
+            'file_id' => $file->id,
             'subdistrict_id' => Subdistrict::query()->pluck("id")->random(),
             'email' => $this->faker->unique()->safeEmail,
             'village_id' => Village::query()->pluck("id")->random(),

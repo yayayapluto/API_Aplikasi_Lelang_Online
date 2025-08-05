@@ -23,12 +23,17 @@ class User extends Model
         'tanggal_lahir',
         'nomor_telepon',
         'alamat',
-        'file_ktp',
+        'file_id',
         'subdistrict_id',
         'email',
         'village_id',
         'password',
     ];
+
+    public function file()
+    {
+        return $this->belongsTo(File::class);
+    }
 
     public function jobType()
     {

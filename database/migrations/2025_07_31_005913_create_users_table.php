@@ -25,7 +25,7 @@ return new class extends Migration
             $table->date("tanggal_lahir");
             $table->string("nomor_telepon");
             $table->text("alamat");
-            $table->string("file_ktp");
+            $table->string("file_id");
             $table->foreignId("subdistrict_id")->nullable()->constrained("subdistricts")->cascadeOnDelete();
             $table->string("email")->unique();
             $table->foreignId("village_id")->nullable()->constrained("villages")->cascadeOnDelete();

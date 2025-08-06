@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Auction;
 use App\Models\AuctionContent;
+use App\Models\AuctionPhoto;
 use App\Models\Category;
 use App\Models\City;
 use App\Models\Country;
@@ -52,5 +53,6 @@ class DatabaseSeeder extends Seeder
 
         Auction::factory(50)->create();
         AuctionContent::factory(50)->create();
+        AuctionPhoto::factory(50)->create();
     }
 }

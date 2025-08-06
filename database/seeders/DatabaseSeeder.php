@@ -6,6 +6,8 @@ use App\Models\Category;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\File;
+use App\Models\Item;
+use App\Models\itemPhoto;
 use App\Models\ItemType;
 use App\Models\JobType;
 use App\Models\Kpknl;
@@ -42,5 +44,8 @@ class DatabaseSeeder extends Seeder
 
         User::factory(50)->create();
         Seller::factory(50)->create();
+
+        Item::factory(50)->create();
+        ItemPhoto::factory(50)->create();
     }
 }

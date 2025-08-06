@@ -47,3 +47,4 @@ Route::apiResource("itemPhotos", \App\Http\Controllers\ItemPhotoController::clas
 
 Route::apiResource("auctions", \App\Http\Controllers\AuctionController::class);
 Route::apiResource("auctionContents", \App\Http\Controllers\AuctionContentController::class);
+Route::apiResource("auctionPhotos", \App\Http\Controllers\AuctionPhotoController::class);
